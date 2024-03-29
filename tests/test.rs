@@ -79,3 +79,28 @@ mod implicit_discriminant {
         assert_eq!(p, ImplicitDiscriminant::Two);
     }
 }
+
+mod deprecated_enum_variant {
+    use serde_repr::{Deserialize_repr, Serialize_repr};
+
+    #[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]
+    #[repr(u8)]
+    enum TestDeprecated {
+        A = 1,
+        B = 2,
+        #[deprecated(note = "Use `B` instead.")]
+        C = 3,
+    }
+
+    #[test]
+    fn test_serialize() {
+        let j = serde_json::to_string(&TestDeprecated::A).unwrap();
+        assert_eq!(j, "1");
+    }
+
+    #[test]
+    fn test_deserialize() {
+        let p: TestDeprecated = serde_json::from_str("2").unwrap();
+        assert_eq!(p, TestDeprecated::B);
+    }
+}

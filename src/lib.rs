@@ -63,6 +63,7 @@ pub fn derive_serialize(input: TokenStream) -> TokenStream {
     TokenStream::from(quote! {
         impl serde::Serialize for #ident {
             #[allow(clippy::use_self)]
+            #[allow(deprecated)]
             fn serialize<S>(&self, serializer: S) -> ::core::result::Result<S::Ok, S::Error>
             where
                 S: serde::Serializer
@@ -120,6 +121,7 @@ pub fn derive_deserialize(input: TokenStream) -> TokenStream {
     TokenStream::from(quote! {
         impl<'de> serde::Deserialize<'de> for #ident {
             #[allow(clippy::use_self)]
+            #[allow(deprecated)]
             fn deserialize<D>(deserializer: D) -> ::core::result::Result<Self, D::Error>
             where
                 D: serde::Deserializer<'de>,
